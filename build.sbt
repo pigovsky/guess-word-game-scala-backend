@@ -1,5 +1,7 @@
 name := "guess-word-game-backend"
 
+organization := "pigovsky"
+
 version := "0.0.1"
 
 scalaVersion := "2.11.1"
@@ -30,3 +32,8 @@ dockerfile in docker := {
     entryPoint("java", "-jar", artifactTargetPath)
   }
 }
+
+imageNames in docker := Seq(
+  // Sets the latest tag
+  ImageName(s"${organization.value}/${name.value}:latest")
+)
