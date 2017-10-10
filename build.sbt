@@ -1,4 +1,4 @@
-name := "guess word game backend"
+name := "guess-word-game-backend"
 
 version := "0.0.1"
 
@@ -15,3 +15,18 @@ libraryDependencies ++= Seq(
 
 lazy val root = (project in file("."))
   .dependsOn(scalty)
+
+enablePlugins(DockerPlugin)
+
+dockerfile in docker := {
+  // The assembly task generates a fat JAR file
+  val artifact: File = assembly.value
+  val artifactTargetPath = s"/app/${artifact.name}"
+
+  new Dockerfile {
+    from("java")
+    add(artifact, artifactTargetPath)
+    expose(8080)
+    entryPoint("java", "-jar", artifactTargetPath)
+  }
+}
